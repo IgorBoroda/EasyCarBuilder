@@ -540,7 +540,24 @@ public class CarBuilderEditor : Editor
     [System.Serializable]
     private class TabLights
     {
+        /// <summary>
+        /// Load UI textures from assets
+        /// </summary>
+        public void LoadTextures()
+        {
+            
+        }
 
+
+
+        /// <summary>
+        /// Show UI
+        /// </summary>
+        public void Show()
+        {
+            
+            
+        }
     }
     private static TabLights tabLights = new TabLights();
 
@@ -549,7 +566,25 @@ public class CarBuilderEditor : Editor
     [System.Serializable]
     private class TabSettings
     {
+        /// <summary>
+        /// Load UI textures from assets
+        /// </summary>
+        public void LoadTextures()
+        {
 
+        }
+
+        
+
+
+        /// <summary>
+        /// Show UI
+        /// </summary>
+        public void Show()
+        {
+
+
+        }
     }
     private static TabSettings tabSettings = new TabSettings();
     #endregion
@@ -564,13 +599,15 @@ public class CarBuilderEditor : Editor
         suspensionBuilder = (SuspensionBuilder)target;
 
         tabSuspension.LoadTextures();
+        tabLights.LoadTextures();
+        tabSettings.LoadTextures();
     }
 
 
 
     public override void OnInspectorGUI()
     {
-        //draw tabs on top
+        //draw tabs buttons on top
         void Content_Tabs()
         {
             GUILayout.BeginHorizontal();
@@ -622,6 +659,16 @@ public class CarBuilderEditor : Editor
         Content_Tabs();
 
 
-        tabSuspension.Show();
+        //draw content
+        void DrawCurrentTab()
+        {
+            switch (tab)
+            {
+                case Tab.SuspensionConstructor: tabSuspension.Show(); break;
+                case Tab.Lights: tabLights.Show(); break;
+                case Tab.EditorSettings: tabSettings.Show(); break;
+            }
+        }
+        DrawCurrentTab();
     }
 }
