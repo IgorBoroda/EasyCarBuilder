@@ -19,6 +19,10 @@ public class CarBuilderEditor : Editor
 
 
 
+    
+
+
+
     [System.Serializable]
     private class TabSuspension
     {
@@ -29,8 +33,24 @@ public class CarBuilderEditor : Editor
         //textures for axis buttons
         private Texture2D texture_SettingsButton, texture_DriveButton, texture_SteerButton;
 
+
         //size of UI content
-        private float contentSize = 70;
+        public float contentSize
+        {
+            get => m_contentSize;
+            set
+            {
+                if (value > 40 && value < 80)
+                    m_contentSize = value;
+                else
+                    Debug.LogError("content szie is out of value");
+            }
+        }
+        private float m_contentSize = 70;
+        public readonly float maxContentSize = 80;
+        public readonly float minContentSize = 50;
+
+
 
 
 
@@ -90,19 +110,19 @@ public class CarBuilderEditor : Editor
                 for (int i = 0; i < wheelPareArr.Length; i++)
                 {
                     //draw buttons under wheels
-                    GUILayout.BeginArea(new Rect(20, 70 + 2f * contentSize * i, 300, 300));
+                    GUILayout.BeginArea(new Rect(20, 70 + 2f * m_contentSize * i, 300, 300));
                     Content_WheelButtons(wheelPareArr[i]);
                     GUILayout.EndArea();
 
 
                     //draw wheel axis
-                    GUILayout.BeginArea(new Rect(20, 70 + 2f * contentSize * i, 300, 300));
+                    GUILayout.BeginArea(new Rect(20, 70 + 2f * m_contentSize * i, 300, 300));
                     Content_WheelAxis(wheelPareArr[i]);
                     GUILayout.EndArea();
 
 
                     //draw buttons
-                    GUILayout.BeginArea(new Rect(20, 70 + 2f * contentSize * i, 300, 300));
+                    GUILayout.BeginArea(new Rect(20, 70 + 2f * m_contentSize * i, 300, 300));
                     Content_AxisButtons(wheelPareArr[i]);
                     GUILayout.EndArea();
 
@@ -110,7 +130,7 @@ public class CarBuilderEditor : Editor
                     //draw middle part
                     if (i < wheelPareArr.Length - 1)
                     {
-                        GUILayout.BeginArea(new Rect(20, 70 + 2f * contentSize * i, 300, 300));
+                        GUILayout.BeginArea(new Rect(20, 70 + 2f * m_contentSize * i, 300, 300));
                         Content_MiddlePart();
                         GUILayout.EndArea();
                     }
@@ -119,7 +139,7 @@ public class CarBuilderEditor : Editor
                 suspensionBuilder.suspension.wheelPareList.AddRange(wheelPareArr);
 
 
-                GUILayout.Space(2 * wheelPareArr.Length * contentSize);
+                GUILayout.Space(2 * wheelPareArr.Length * m_contentSize);
 
 
                 //button "add"
@@ -193,8 +213,8 @@ public class CarBuilderEditor : Editor
         //draw emty wheel axis
         void Content_WheelAxis(WheelPare _wheelPare)
         {
-            float width = 4 * contentSize;
-            float height = 1 * contentSize;
+            float width = 4 * m_contentSize;
+            float height = 1 * m_contentSize;
 
 
             bool IsLeftWheelPlaced()
@@ -241,8 +261,8 @@ public class CarBuilderEditor : Editor
         //buttons under wheels
         void Content_WheelButtons(WheelPare _wheelPare)
         {
-            float width = 0.5f * 70;
-            float height = 1f * 70;
+            float width = 0.5f * contentSize;
+            float height = 1f * contentSize;
 
             Color defaultColor = GUI.backgroundColor;
             Color pressedColor = Color.white;
@@ -322,7 +342,7 @@ public class CarBuilderEditor : Editor
             DrawButton(WheelSide.left);
 
 
-            GUILayout.Space(1.7f * 70);
+            GUILayout.Space(1.7f * contentSize);
 
 
             DrawButton(WheelSide.right);
@@ -336,8 +356,8 @@ public class CarBuilderEditor : Editor
         //buttons on wheel axis
         void Content_AxisButtons(WheelPare _wheelPare)
         {
-            float width = 0.4f * contentSize;
-            float height = 0.4f * contentSize;
+            float width = 0.4f * m_contentSize;
+            float height = 0.4f * m_contentSize;
 
 
             Color defaultColor = GUI.backgroundColor;
@@ -352,7 +372,7 @@ public class CarBuilderEditor : Editor
 
 
             //horizontal space
-            GUILayout.Space(0.7f * contentSize);
+            GUILayout.Space(0.7f * m_contentSize);
 
 
             void SteerAngleButton()
@@ -451,11 +471,11 @@ public class CarBuilderEditor : Editor
         //draw middle part between wheel axis
         void Content_MiddlePart()
         {
-            float width = 4f * 70;
-            float height = 1f * 70;
+            float width = 4f * contentSize;
+            float height = 1f * contentSize;
 
 
-            GUILayout.Space(0.7f * 70);
+            GUILayout.Space(0.7f * contentSize);
             GUILayout.Label(texture_middlePart, GUILayout.Width(width), GUILayout.Height(height));
         }
         #endregion
@@ -533,20 +553,64 @@ public class CarBuilderEditor : Editor
 
 
     }
-    private TabSuspension tabSuspension = new TabSuspension();
+    private static TabSuspension tabSuspension = new TabSuspension();
 
 
 
     [System.Serializable]
     private class TabLights
     {
+        //base textures
+        private Texture2D texture_frontCar, texture_backCar;
+
+        //front light textures
+        private Texture2D texture_frontBasicOn, texture_frontBasicOff;
+        private Texture2D texture_frontHightBeamOn, texture_frontHightBeamOff;
+        private Texture2D texture_frontTurnLeftOn, texture_frontTurnLeftOff;
+        private Texture2D texture_frontTurnRightOn, texture_frontTurnRightOff;
+
+
+        //size of UI content
+        public float contentSize
+        {
+            get => m_contentSize;
+            set
+            {
+                if (value > 40 && value < 80)
+                    m_contentSize = value;
+                else
+                    Debug.LogError("content szie is out of value");
+            }
+        }
+        private float m_contentSize = 70;
+        public readonly float maxContentSize = 80;
+        public readonly float minContentSize = 50;
+
+
+
+
+
         /// <summary>
         /// Load UI textures from assets
         /// </summary>
         public void LoadTextures()
         {
-            
+            texture_frontCar = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/EditorCarFront.png", typeof(Texture2D));
+            texture_backCar = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/EditorCarBack.png", typeof(Texture2D)); 
+
+            texture_frontBasicOn = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorFrontBasicOn.png", typeof(Texture2D));
+            texture_frontBasicOff = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorCarFrontBasicOff.png", typeof(Texture2D));
+
+            texture_frontHightBeamOn = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorCarFrontHightBeamOn.png", typeof(Texture2D));
+            texture_frontHightBeamOff = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorCarFrontHightBeamOff.png", typeof(Texture2D));
+
+            texture_frontTurnLeftOn = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorCarFrontTurnLeftOn.png", typeof(Texture2D));
+            texture_frontTurnLeftOff = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorCarFrontTurnLeftOff.png", typeof(Texture2D));
+
+            texture_frontTurnRightOn = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorCarFrontTurnRightOn.png", typeof(Texture2D));
+            texture_frontTurnRightOff = (Texture2D)AssetDatabase.LoadAssetAtPath("Assets/CarSuspension/Textures/Lights/Front/EditorCarFrontTurnRightOff.png", typeof(Texture2D));
         }
+
 
 
 
@@ -555,9 +619,89 @@ public class CarBuilderEditor : Editor
         /// </summary>
         public void Show()
         {
-            
-            
+            Content_Base();
+            Content_Lights();
         }
+
+
+
+        #region Content
+        private void Content_Base()
+        {
+            float width = 4 * contentSize;
+            float height = 4 * contentSize;
+
+            GUILayout.BeginHorizontal();
+
+
+            GUILayout.Label(texture_frontCar, GUILayout.Width(width), GUILayout.Height(height));
+            GUILayout.Label(texture_backCar, GUILayout.Width(width), GUILayout.Height(height));
+
+
+            GUILayout.EndHorizontal();
+        }
+
+
+
+
+
+        private void Content_Lights()
+        {
+            float width = 4 * contentSize;
+            float height = 4 * contentSize;
+
+
+
+
+
+            #region basic lights
+            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+
+            GUILayout.Label(texture_frontBasicOn, GUILayout.Width(width), GUILayout.Height(height));
+            //GUILayout.Label(texture_frontBasicOff, GUILayout.Width(width), GUILayout.Height(height));
+
+            GUILayout.EndArea();
+            #endregion
+
+
+
+
+
+            #region hight beam
+            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+
+            GUILayout.Label(texture_frontHightBeamOn, GUILayout.Width(width), GUILayout.Height(height));
+            //GUILayout.Label(texture_frontHightBeamOff, GUILayout.Width(width), GUILayout.Height(height));
+
+            GUILayout.EndArea();
+            #endregion
+
+
+
+
+            #region turn left
+            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+
+            GUILayout.Label(texture_frontTurnLeftOn, GUILayout.Width(width), GUILayout.Height(height));
+           // GUILayout.Label(texture_frontTurnLeftOff, GUILayout.Width(width), GUILayout.Height(height));
+
+            GUILayout.EndArea();
+            #endregion
+
+
+
+
+            #region turn right
+            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+
+            GUILayout.Label(texture_frontTurnRightOn, GUILayout.Width(width), GUILayout.Height(height));
+            //GUILayout.Label(texture_frontTurnRightOff, GUILayout.Width(width), GUILayout.Height(height));
+
+            GUILayout.EndArea();
+            #endregion
+        }
+        #endregion
+
     }
     private static TabLights tabLights = new TabLights();
 
@@ -582,8 +726,8 @@ public class CarBuilderEditor : Editor
         /// </summary>
         public void Show()
         {
-
-
+            tabSuspension.contentSize = EditorGUILayout.Slider("Suspension Content Size", tabSuspension.contentSize, tabSuspension.minContentSize, tabSuspension.maxContentSize);
+            tabLights.contentSize = EditorGUILayout.Slider("Lights Content Size", tabLights.contentSize, tabLights.minContentSize, tabLights.maxContentSize);
         }
     }
     private static TabSettings tabSettings = new TabSettings();
