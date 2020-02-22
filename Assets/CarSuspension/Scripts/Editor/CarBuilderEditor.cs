@@ -569,6 +569,11 @@ public class CarBuilderEditor : Editor
         private Texture2D texture_frontTurnLeftOn, texture_frontTurnLeftOff;
         private Texture2D texture_frontTurnRightOn, texture_frontTurnRightOff;
 
+        //back light textures
+        private Texture2D texture_backStopOn, texture_backStopOff;
+        private Texture2D texture_backReverseOn, texture_backReverceOff;
+        private Texture2D texture_backLeft;
+
 
         //size of UI content
         public float contentSize
@@ -586,6 +591,10 @@ public class CarBuilderEditor : Editor
         public readonly float maxContentSize = 80;
         public readonly float minContentSize = 50;
 
+
+
+        public enum Orientation { Vertical, Horizontal }
+        public Orientation orientation;
 
 
 
@@ -619,86 +628,123 @@ public class CarBuilderEditor : Editor
         /// </summary>
         public void Show()
         {
-            Content_Base();
-            Content_Lights();
+            Content_BaseAndLights();
         }
 
 
 
         #region Content
-        private void Content_Base()
-        {
-            float width = 4 * contentSize;
-            float height = 4 * contentSize;
-
-            GUILayout.BeginHorizontal();
-
-
-            GUILayout.Label(texture_frontCar, GUILayout.Width(width), GUILayout.Height(height));
-            GUILayout.Label(texture_backCar, GUILayout.Width(width), GUILayout.Height(height));
-
-
-            GUILayout.EndHorizontal();
-        }
-
-
-
-
-
-        private void Content_Lights()
+        private void Content_BaseAndLights()
         {
             float width = 4 * contentSize;
             float height = 4 * contentSize;
 
 
+            
+            void DrawBase()
+            {
+                //draw UI in horizontal orientation
+                if (orientation == Orientation.Horizontal)
+                {
+                    GUILayout.BeginHorizontal();
+
+
+                    GUILayout.Label(texture_frontCar, GUILayout.Width(width), GUILayout.Height(height));
+                    GUILayout.Label(texture_backCar, GUILayout.Width(width), GUILayout.Height(height));
+
+
+                    GUILayout.EndHorizontal();
+                }
 
 
 
-            #region basic lights
-            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
-
-            GUILayout.Label(texture_frontBasicOn, GUILayout.Width(width), GUILayout.Height(height));
-            //GUILayout.Label(texture_frontBasicOff, GUILayout.Width(width), GUILayout.Height(height));
-
-            GUILayout.EndArea();
-            #endregion
-
-
+                //draw UI in vertical orientation
+                else if (orientation == Orientation.Vertical)
+                {
+                    GUILayout.Label(texture_frontCar, GUILayout.Width(width), GUILayout.Height(height));
+                    GUILayout.Label(texture_backCar, GUILayout.Width(width), GUILayout.Height(height));
+                }
+            }
+            DrawBase();
 
 
 
-            #region hight beam
-            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+            void DrawFrontLights()
+            {
 
-            GUILayout.Label(texture_frontHightBeamOn, GUILayout.Width(width), GUILayout.Height(height));
-            //GUILayout.Label(texture_frontHightBeamOff, GUILayout.Width(width), GUILayout.Height(height));
+                #region basic lights
+                GUILayout.BeginArea(new Rect(13, 28, 500, 500));
 
-            GUILayout.EndArea();
-            #endregion
+                GUILayout.Label(texture_frontBasicOn, GUILayout.Width(width), GUILayout.Height(height));
+                //GUILayout.Label(texture_frontBasicOff, GUILayout.Width(width), GUILayout.Height(height));
 
-
-
-
-            #region turn left
-            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
-
-            GUILayout.Label(texture_frontTurnLeftOn, GUILayout.Width(width), GUILayout.Height(height));
-           // GUILayout.Label(texture_frontTurnLeftOff, GUILayout.Width(width), GUILayout.Height(height));
-
-            GUILayout.EndArea();
-            #endregion
+                GUILayout.EndArea();
+                #endregion
 
 
 
 
-            #region turn right
-            GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+                #region hight beam
+                GUILayout.BeginArea(new Rect(13, 28, 500, 500));
 
-            GUILayout.Label(texture_frontTurnRightOn, GUILayout.Width(width), GUILayout.Height(height));
-            //GUILayout.Label(texture_frontTurnRightOff, GUILayout.Width(width), GUILayout.Height(height));
+                GUILayout.Label(texture_frontHightBeamOn, GUILayout.Width(width), GUILayout.Height(height));
+                //GUILayout.Label(texture_frontHightBeamOff, GUILayout.Width(width), GUILayout.Height(height));
 
-            GUILayout.EndArea();
-            #endregion
+                GUILayout.EndArea();
+                #endregion
+
+
+
+
+                #region turn left
+                GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+
+                GUILayout.Label(texture_frontTurnLeftOn, GUILayout.Width(width), GUILayout.Height(height));
+                //GUILayout.Label(texture_frontTurnLeftOff, GUILayout.Width(width), GUILayout.Height(height));
+
+                GUILayout.EndArea();
+                #endregion
+
+
+
+
+                #region turn right
+                GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+
+                GUILayout.Label(texture_frontTurnRightOn, GUILayout.Width(width), GUILayout.Height(height));
+                //GUILayout.Label(texture_frontTurnRightOff, GUILayout.Width(width), GUILayout.Height(height));
+
+                GUILayout.EndArea();
+                #endregion
+            }
+            DrawFrontLights();
+
+
+            void DrawBackLights()
+            {
+
+                //draw back lights in horizontal orientation
+                if(orientation == Orientation.Horizontal)
+                {
+
+                }
+
+
+                //draw back lights in vertical orientation
+                else if(orientation == Orientation.Vertical)
+                {
+                    #region basic lights
+                    GUILayout.BeginArea(new Rect(13, 28, 500, 500));
+
+                    //GUILayout.Label(texture_frontBasicOn, GUILayout.Width(width), GUILayout.Height(height));
+                    //GUILayout.Label(texture_frontBasicOff, GUILayout.Width(width), GUILayout.Height(height));
+
+                    GUILayout.EndArea();
+                    #endregion
+                }
+            }
+            DrawBackLights();
+
         }
         #endregion
 
@@ -726,8 +772,12 @@ public class CarBuilderEditor : Editor
         /// </summary>
         public void Show()
         {
+            GUILayout.Label("Constructor settings");
             tabSuspension.contentSize = EditorGUILayout.Slider("Suspension Content Size", tabSuspension.contentSize, tabSuspension.minContentSize, tabSuspension.maxContentSize);
+
+            GUILayout.Label("Lights settings");
             tabLights.contentSize = EditorGUILayout.Slider("Lights Content Size", tabLights.contentSize, tabLights.minContentSize, tabLights.maxContentSize);
+            tabLights.orientation = (TabLights.Orientation)EditorGUILayout.EnumPopup("Orientation", tabLights.orientation);
         }
     }
     private static TabSettings tabSettings = new TabSettings();
